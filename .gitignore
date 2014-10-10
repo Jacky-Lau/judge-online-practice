@@ -1,0 +1,5 @@
+.project
+.classpath
+.settings/
+target/test-classes/edu/zju/bme/judge_online_system/AppTest.class
+target/
