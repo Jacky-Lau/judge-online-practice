@@ -1,87 +1,59 @@
 package edu.zju.bme.practice;
 
+import java.math.*;
 import java.util.Scanner;
-
-class Parameters {
-
-	private int length = 0;
-	private String pattern = "";
-	private int number = 0;
-
-	public Parameters() {
-
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	public String getPattern() {
-		return pattern;
-	}
-
-	public void setPattern(String pattern) {
-		this.pattern = pattern;
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-}
 
 public class TheFunNumberSystem {
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int count = scanner.nextInt();
-		Parameters[] params = new Parameters[count];
-		for (int i = 0; i < count; i++) {
-			params[i] = new Parameters();
-			params[i].setLength(scanner.nextInt());
-			params[i].setPattern(scanner.next());
-			params[i].setNumber(scanner.nextInt());
-		}
-
-		for (Parameters param : params) {
-			int length = param.getLength();
-			String pattern = param.getPattern();
-			int number = param.getNumber();
-			double[] factors = new double[length];
-			for (int i = 0; i < length; i++) {
-				char bit = pattern.charAt(i);
-				int index = length - i - 1;
-				if (bit == 'n') {
-					factors[index] = -Math.pow(2, index);
-				} else if (bit == 'p') {
-					factors[index] = Math.pow(2, index);
+	public static String solve(String s, long n) {
+		String result = "";
+		boolean flag = n > 0 ? true : false;
+		n = n > 0 ? n : -n;
+		for (int i = s.length() - 1; i >= 0; --i) {
+			char ch = s.charAt(i);
+			switch (ch) {
+			case 'p':
+				if (flag) {
+					result += n % 2;
+					n /= 2;
+					break;
+				} else {
+					result += n % 2;
+					n = (n + n % 2 ) / 2;
+					break;
 				}
-			}
-			boolean isPossible = false;
-			for (int j = 0; j < Math.pow(2, length); j++) {
-				double total = 0;
-				for (int k = 0; k < length; k++) {
-					if (((j >> (length - k)) & 1) == 1) {
-						total += factors[length - k];
-					}
-				}
-				if (total == number) {
-					isPossible = true;
-					System.out.println(Integer.toBinaryString(j));
+			case 'n':
+				if (flag) {
+					result += n % 2;
+					n = (n + n % 2 ) / 2;
+					break;
+				} else {
+					result += n % 2;
+					n = n / 2;
 					break;
 				}
 			}
-			if (!isPossible) {
-				System.out.println("Impossible");
-			}
+		}
+		StringBuffer one = new StringBuffer(result);
+		if (n == 0)
+			result = one.reverse().toString();
+		if (n != 0)
+			result = "Impossible";
+		return result;
+	}
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		String s;
+		long len;
+		long n;
+		int test;
+		test = in.nextInt();
+		for (int i = 0; i < test; i++) {
+			len = in.nextLong();
+			s = in.next();
+			n = in.nextLong();
+			System.out.println(TheFunNumberSystem.solve(s, n));
 		}
 	}
 }
